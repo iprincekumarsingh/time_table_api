@@ -1,0 +1,62 @@
+[
+  {
+    "_id": {
+      "$oid": "6427bde000bb7d4a4d2f80ba"
+    },
+    "subject": "DEVOPS",
+    "day": "Monday",
+    "user": {
+      "$oid": "64277777bbb186513eca11fa"
+    },
+    "period": "1",
+    "time": "8:00-9:00",
+    "classs": "1",
+    "sec": "A",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6427bdf55c91a712e8e58be2"
+    },
+    "subject": "Maths",
+    "day": "Monday",
+    "user": {
+      "$oid": "64277777bbb186513eca11fa"
+    },
+    "period": "2",
+    "time": "8:00-9:00",
+    "classs": "1",
+    "sec": "A",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6427be033ce10c5bf232b183"
+    },
+    "subject": "Software Engineering",
+    "day": "Monday",
+    "user": {
+      "$oid": "64277777bbb186513eca11fa"
+    },
+    "period": "3",
+    "time": "8:00-9:00",
+    "classs": "1",
+    "sec": "A",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6427be2e4da50fa8101ab29c"
+    },
+    "subject": "Software Engineering",
+    "day": "Monday",
+    "user": {
+      "$oid": "64277777bbb186513eca11fb"
+    },
+    "period": "1",
+    "time": "8:00-9:00",
+    "classs": "1",
+    "sec": "A",
+    "__v": 0
+  }
+]
