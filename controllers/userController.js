@@ -50,7 +50,8 @@ exports.login = async (req, res) => {
     }
 
 
-    User.findOne({ email: email.toLowerCase() }).then((data) => {
+
+    await User.findOne({ email: email.toLowerCase() }).then((data) => {
       if (!data) {
         return res.status(400).send({
           status: "fail",
@@ -60,7 +61,30 @@ exports.login = async (req, res) => {
     })
 
 
-    const user = User.findOne({ email: email.toLowerCase() }).select("+password");
+    // await User.findOne({ status: "ban" }).then((data) => {
+    //   if (data) {
+    //     return res.status(400).send({
+    //       status: "fail",
+    //       message: "You are banned by admin"
+    //     })
+    //   }
+
+
+    const user = await User.findOne({ email: email.toLowerCase() }).select("+password").select("+status");
+
+
+    const isban = user.status === "ban" ? false : true;
+
+    console.log(isban);
+
+
+    // user is banner functionality
+    if (!isban) {
+      return res.status(400).send({
+        status: "fail",
+        message: "You are banned by admin"
+      })
+    }
 
     if (!user || !(await user.isValidPassword(password, user.password))) {
 
@@ -70,10 +94,11 @@ exports.login = async (req, res) => {
       })
     }
 
-
     const token = await user.generateToken();
 
-    this.password = undefined;
+
+
+    user.password = undefined;
 
     res.status(200).json({
       status: "success",
@@ -90,10 +115,10 @@ exports.login = async (req, res) => {
 
 exports.teacherTimetable = async (req, res) => {
   try {
-    //    find all the details of the user by user id from the object
-    // const timetable = await Timetable.find({ timetableteacher.user: "64277777bbb186513eca11fb"});
-    const { id } = req.params;
-    if (!req.params.id) {
+  
+
+    const id = req.user.id
+    if (!id) {
       res.status(400).send({
         status: "fail",
         message: "Please provide a valid id"

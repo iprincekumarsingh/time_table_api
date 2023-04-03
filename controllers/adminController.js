@@ -1,5 +1,4 @@
 exports.allUser = (req, res) => {
-
     // showing all the user
     try {
         User.find().then((user) => {
@@ -39,11 +38,8 @@ exports.OneUser = (req, res) => {
 }
 
 exports.banUser = (req, res) => {
-
     // banning the user
-
     try {
-
         if (res.params.id) {
             User.findByIdAndUpdate(res.params.id, { status: 'banned' }).then((user) => {
                 res.status(200).send({
@@ -53,10 +49,14 @@ exports.banUser = (req, res) => {
                 })
             }).catch((err) => {
                 console.log(err);
+                return res.status(500).send({
+                    status: "error",
+                    message: "User not banned"
             })
+        })
         }
 
-    } catch (err) {
-
+    } catch (err) {     
+        console.log('error');
     }
 }
