@@ -3,6 +3,8 @@ const app = express()
 var morgan = require('morgan')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
 // morgan('tiny')
 app.use(morgan('tiny'))
 const home = require('./routes/home.route')
