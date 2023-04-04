@@ -4,12 +4,10 @@
   "description": "",
   "main": "index.js",
 
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "prebuild": "rm -rf dist",
-    
+  "scripts": {    
     "start": "node index.js"
+    , "dev": "env-cmd nodemon index.js",
+    "repl": "env-cmd node"
   },
   "keywords": [],
   "author": "",
