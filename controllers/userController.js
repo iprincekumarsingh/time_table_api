@@ -115,7 +115,7 @@ exports.login = async (req, res) => {
 
 exports.teacherTimetable = async (req, res) => {
   try {
-  
+
 
     const id = req.user.id
     if (!id) {

@@ -6,8 +6,9 @@
 
   "scripts": {    
     "start": "node index.js"
-    , "dev": "env-cmd nodemon index.js",
-    "repl": "env-cmd node"
+    , "dev": "env-cmd nodemon index.js"
+ 
+
   },
   "keywords": [],
   "author": "",

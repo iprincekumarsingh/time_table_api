@@ -1,7 +1,5 @@
 const app = require("./app");
 
-
-
 // importing dotenv
 require("dotenv").config();
 // db connection import

@@ -37,7 +37,7 @@ exports.findByTeacher = async (req, res) => {
       });
     }
 
-    
+
     User.findById(id)
       .then((user) => {
         if (!user.role === "admin") {
@@ -63,21 +63,23 @@ exports.findByTeacher = async (req, res) => {
 
 exports.updateTimetable = async (req, res) => {
   //find the timetable exist or not
-  const { id } = req.params;
+  const { timetable_id } = req.params;
   try {
+    // find the params id exist or not  
+
+    // check if param is empty or not
     if (!req.params.id) {
       res.status(400).send({
         status: "fail",
         message: "Please provide a valid id",
       });
+
     }
 
 
     // check the user role 
 
     const id = req.user.id
-
-    
 
     User.findById(id)
       .then((user) => {
@@ -94,9 +96,9 @@ exports.updateTimetable = async (req, res) => {
 
     // find timee table by id that exist or not
 
-    Timetable.findById(id)
+    Timetable.findById(timetable_id)
       .then((timetable) => {
-        if (!timetable) {
+        if (timetable) {
           res.status(400).send({
             status: "fail",
             message: "Timetable not found",
@@ -110,7 +112,7 @@ exports.updateTimetable = async (req, res) => {
     // update the timetable
     const { subject, day, user, period, time, classs, sec } = req.body;
     const timetable = await Timetable.findByIdAndUpdate(
-      id,
+      req.params.id,
       {
         subject,
         day,
@@ -118,14 +120,14 @@ exports.updateTimetable = async (req, res) => {
         period,
         time,
         classs,
-        sec,
+        sec
       },
-      { new: true, runValidators: true }
+
     );
     res.status(200).send({
       status: "success",
       message: "Timetable updated successfully",
-      timetable,
+      timetable:timetable,
     });
   } catch (err) {
     console.log(err);
