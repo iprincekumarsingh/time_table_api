@@ -2,7 +2,7 @@ exports.allUser = (req, res) => {
     // showing all the user
     try {
         User.find().then((user) => {
-            res.status(200).send({
+         return   res.status(200).send({
                 status: "success",
                 message: "All the user",
                 user
@@ -12,6 +12,7 @@ exports.allUser = (req, res) => {
         })
     }
     catch (err) {
+        console.log(err );
 
     }
 }
@@ -42,7 +43,7 @@ exports.banUser = (req, res) => {
     try {
         if (res.params.id) {
             User.findByIdAndUpdate(res.params.id, { status: 'banned' }).then((user) => {
-                res.status(200).send({
+         return    res.status(200).send({
                     status: "success",
                     message: "User banned",
                     user

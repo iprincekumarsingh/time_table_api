@@ -15,7 +15,7 @@ exports.createTimetable = async (req, res) => {
       classs,
       sec,
     });
-    res.status(200).send({
+ return   res.status(200).send({
       status: "success",
       message: "Timetable created successfully",
       timetable,
@@ -31,7 +31,7 @@ exports.findByTeacher = async (req, res) => {
     // const timetable = await Timetable.find({ timetableteacher.user: "64277777bbb186513eca11fb"});
     const { id } = req.params;
     if (!req.params.id) {
-      res.status(400).send({
+  return  res.status(400).send({
         status: "fail",
         message: "Please provide a valid id",
       });
@@ -41,7 +41,7 @@ exports.findByTeacher = async (req, res) => {
     User.findById(id)
       .then((user) => {
         if (!user.role === "admin") {
-          res.status(400).send({
+    return res.status(400).send({
             status: "fail",
             message: "Unauthoriez access",
           });
@@ -51,7 +51,7 @@ exports.findByTeacher = async (req, res) => {
         console.log(err);
       });
     const timetable = await Timetable.find({ user: req.params.id });
-    res.status(200).send({
+   return res.status(200).send({
       status: "success",
       message: "Timetable found successfully",
       timetable,
@@ -69,7 +69,7 @@ exports.updateTimetable = async (req, res) => {
 
     // check if param is empty or not
     if (!req.params.id) {
-      res.status(400).send({
+    return  res.status(400).send({
         status: "fail",
         message: "Please provide a valid id",
       });
@@ -84,7 +84,7 @@ exports.updateTimetable = async (req, res) => {
     User.findById(id)
       .then((user) => {
         if (!user.role === "employee") {
-          res.status(400).send({
+     return     res.status(400).send({
             status: "fail",
             message: "Unauthoriez access",
           });
@@ -124,7 +124,7 @@ exports.updateTimetable = async (req, res) => {
       },
 
     );
-    res.status(200).send({
+ return res.status(200).send({
       status: "success",
       message: "Timetable updated successfully",
       timetable:timetable,
@@ -139,7 +139,7 @@ exports.seeTimeTable = async (req, res) => {
   try {
     const timetable = await Timetable.find({ user: id });
 
-    res.status(200).send({
+ return res.status(200).send({
       status: "success",
       timetable,
     });

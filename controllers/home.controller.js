@@ -1,5 +1,5 @@
 exports.home = (req, res) => {
-    res.status(200).json({
+   return res.status(200).json({
         message: 'Home Route'
     })
 }
