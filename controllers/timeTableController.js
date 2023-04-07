@@ -135,6 +135,15 @@ exports.updateTimetable = async (req, res) => {
 };
 
 exports.seeTimeTable = async (req, res) => {
+
+
+
+  if(!req.user){
+    return res.status(400).send({
+      status: "fail",
+      message: "Unauthoriez access",
+    });
+  }
   const id = req.user.id;
   try {
     const timetable = await Timetable.find({ user: id });
