@@ -20,12 +20,17 @@ exports.createAccount = async (req, res) => {
       }
     });
 
-    const user = await User.create({ name, email: email.toLowerCase(), phone, password });
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      phone,
+      password,
+    });
     const token = await user.generateToken();
 
     this.password = undefined;
 
-    res.status(200).send({
+    return res.status(200).send({
       status: "success",
       message: "Account created successfully",
       user,
@@ -37,103 +42,79 @@ exports.createAccount = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-
   try {
-
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).send({
         status: "fail",
-        message: "Please fill all the fields"
-      })
+        message: "Please fill all the fields",
+      });
     }
-
-
 
     await User.findOne({ email: email.toLowerCase() }).then((data) => {
       if (!data) {
         return res.status(400).send({
           status: "fail",
-          message: "User does not exist"
-        })
+          message: "User does not exist",
+        });
       }
-    })
+    });
 
-
-    // await User.findOne({ status: "ban" }).then((data) => {
-    //   if (data) {
-    //     return res.status(400).send({
-    //       status: "fail",
-    //       message: "You are banned by admin"
-    //     })
-    //   }
-
-
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+password").select("+status");
-
+    const user = await User.findOne({ email: email.toLowerCase() })
+      .select("+password")
+      .select("+status");
 
     const isban = user.status === "ban" ? false : true;
 
     console.log(isban);
 
-
     // user is banner functionality
     if (!isban) {
       return res.status(400).send({
         status: "fail",
-        message: "You are banned by admin"
-      })
+        message: "You are banned by admin",
+      });
     }
 
     if (!user || !(await user.isValidPassword(password, user.password))) {
-
       return res.status(400).send({
         status: "fail",
-        message: "Invalid credentials"
-      })
+        message: "Invalid credentials",
+      });
     }
 
     const token = await user.generateToken();
 
-
-
     user.password = undefined;
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: "Login successful",
       user,
-      token
-    })
-  }
-  catch (err) {
+      token,
+    });
+  } catch (err) {
     console.log();
   }
-
-}
+};
 
 exports.teacherTimetable = async (req, res) => {
   try {
-
-
-    const id = req.user.id
+    const id = req.user.id;
     if (!id) {
-      res.status(400).send({
+     return res.status(400).send({
         status: "fail",
-        message: "Please provide a valid id"
+        message: "Please provide a valid id",
       });
-
     }
     const timetable = await Timetable.find({ user: req.user.id });
-    res.status(200).send({
+    return res.status(200).send({
       status: "success",
       message: "Timetable found successfully",
-      timetable
+      timetable,
     });
-
   } catch (err) {
     console.log(err);
   }
-
-}
+};
