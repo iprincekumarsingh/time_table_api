@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // parse application/json
 
-const whitelist = ["http://localhost:3000","http://127.0.0.1:3000"]
+const whitelist = ["http://localhost:3000","http://127.0.0.1:3000","https://timetable-api-zeta.vercel.app/"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
