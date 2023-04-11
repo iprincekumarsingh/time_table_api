@@ -13,7 +13,6 @@ const rolecheck = async (req, res, next) => {
   req.user = await User.findById(decoded.id)
 
   // check the user role
-
   if (req.user.role != "admin") {
     return res.status(400).send({
       status: "fail",

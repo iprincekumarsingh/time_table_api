@@ -11,16 +11,18 @@ exports.createAccount = async (req, res) => {
       });
     }
 
-    User.findOne({ email, phone }).then((data) => {
+    //  check if email is already registered
+
+    User.findOne({ email }).then((data) => {
       if (data) {
-        return res.status(400).json({
+        return res.status(400).send({
           status: "fail",
-          message: "User already exist",
+          message: "Email already registered",
         });
       }
     });
 
-    const user = await User.create({
+    const user = User.create({
       name,
       email: email.toLowerCase(),
       phone,
@@ -28,7 +30,7 @@ exports.createAccount = async (req, res) => {
     });
     const token = await user.generateToken();
 
-    this.password = undefined;
+    password = undefined;
 
     return res.status(200).send({
       status: "success",
@@ -44,24 +46,23 @@ exports.createAccount = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password) {
-      return res.status(400).send({
+      return res.status(200).send({
         status: "fail",
         message: "Please fill all the fields",
       });
     }
 
-    await User.findOne({ email: email.toLowerCase() }).then((data) => {
+    await User.findOne({ email }).then((data) => {
       if (!data) {
-        return res.status(400).send({
+        return res.status(401).send({
           status: "fail",
           message: "User does not exist",
         });
       }
     });
 
-    const user = await User.findOne({ email: email.toLowerCase() })
+    const user = await User.findOne({ email })
       .select("+password")
       .select("+status");
 
@@ -78,7 +79,7 @@ exports.login = async (req, res) => {
     }
 
     if (!user || !(await user.isValidPassword(password, user.password))) {
-      return res.status(400).send({
+      return res.send({
         status: "fail",
         message: "Invalid credentials",
       });
@@ -88,7 +89,7 @@ exports.login = async (req, res) => {
 
     user.password = undefined;
 
-    return res.status(200).json({
+    return res.status(200).send({
       status: "success",
       message: "Login successful",
       user,
@@ -103,7 +104,7 @@ exports.teacherTimetable = async (req, res) => {
   try {
     const id = req.user.id;
     if (!id) {
-     return res.status(400).send({
+      return res.status(400).send({
         status: "fail",
         message: "Please provide a valid id",
       });
@@ -116,5 +117,53 @@ exports.teacherTimetable = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+  }
+};
+exports.profile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    return res.status(200).send({
+      status: "success",
+      message: "User found successfully",
+      user,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.updateProfile = async (req, res) => {
+  const { name, email, phone} = req.body;
+
+  if (!name || !email || !phone ) {
+    return res.status(400).send({
+      status: "fail",
+      message: "Please fill all the fields",
+    });
+  }
+
+  // update the user if password is given or not
+  if (password) {
+    const user = await User.findByIdAndUpdate(req.user.id, {
+      name,
+      email,
+      phone,
+      
+    });
+    return res.status(200).send({
+      status: "success",
+      message: "User updated successfully",
+      user,
+    });
+  } else {
+    const user = await User.findByIdAndUpdate(req.user.id, {
+      name,
+      email,
+      phone,
+    });
+    return res.status(200).json({
+      status: "success",
+      message: "User updated successfully",
+      user,
+    });
   }
 };
