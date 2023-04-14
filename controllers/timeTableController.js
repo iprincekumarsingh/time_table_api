@@ -1,4 +1,5 @@
 const Timetable = require("../models/timetableModal");
+const studentTimeTable = require("../models/studentsModal");
 
 const User = require("../models/userModal");
 
@@ -115,7 +116,7 @@ exports.updateTimetable = async (req, res) => {
     // update the timetable
     const { subject, day, user, period, time, classs, sec } = req.body;
 
-    if (!subject || !day || !user || !period  || !classs || !sec) {
+    if (!subject || !day || !user || !period || !classs || !sec) {
       return res.status(400).send({
         status: "fail",
         message: "Please provide all the details",
@@ -188,7 +189,6 @@ exports.viewparticularTimetable = async (req, res) => {
       });
     }
 
-   
     const timetable = await Timetable.findById({ _id: id }).populate("user");
     return res.status(200).send({
       status: "success",
@@ -198,5 +198,53 @@ exports.viewparticularTimetable = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  
+};
+
+// creating student timetable
+exports.studentCreateTimetable = async (req, res) => {
+  try {
+    const { subject, day, user, period, time, classs, sec } = req.body;
+
+    if (!subject || !day || !user || !period || !classs || !sec) {
+      return res.status(400).send({
+        status: "fail",
+        message: "Please provide all the details",
+      });
+    }
+    const timetable = await studentTimeTable.create({
+      subject,
+      day,
+      user,
+      period,
+      time,
+      classs,
+      sec,
+    });
+    return res.status(200).send({
+      status: "success",
+      message: "Timetable created successfully",
+      timetable: timetable,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.studentTimeTable = async (req, res) => {
+  const { id, sec } = req.params;
+
+  const timetable = await studentTimeTable
+    .find({ classs: id, sec: sec })
+    .populate("user");
+
+  if (!timetable) {
+    return res.status(400).send({
+      status: "fail",
+      message: "Timetable not found",
+    });
+  }
+  return res.status(200).send({
+    status: "success",
+    message: "Timetable found successfully",
+    timetable,
+  });
 };

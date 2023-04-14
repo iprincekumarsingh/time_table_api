@@ -1,4 +1,5 @@
 const User = require("../models/userModal");
+const bcryptjs = require("bcryptjs");
 exports.createAccount = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
@@ -132,9 +133,9 @@ exports.profile = async (req, res) => {
   }
 };
 exports.updateProfile = async (req, res) => {
-  const { name, email, phone} = req.body;
+  const { name, email, phone } = req.body;
 
-  if (!name || !email || !phone ) {
+  if (!name || !email || !phone) {
     return res.status(400).send({
       status: "fail",
       message: "Please fill all the fields",
@@ -142,28 +143,40 @@ exports.updateProfile = async (req, res) => {
   }
 
   // update the user if password is given or not
-  if (password) {
-    const user = await User.findByIdAndUpdate(req.user.id, {
-      name,
-      email,
-      phone,
-      
-    });
-    return res.status(200).send({
-      status: "success",
-      message: "User updated successfully",
-      user,
-    });
-  } else {
-    const user = await User.findByIdAndUpdate(req.user.id, {
-      name,
-      email,
-      phone,
-    });
-    return res.status(200).json({
-      status: "success",
-      message: "User updated successfully",
-      user,
+
+  const user = await User.findByIdAndUpdate(req.user.id, {
+    name,
+    email,
+    phone,
+  });
+  return res.status(200).send({
+    status: "success",
+    message: "User updated successfully",
+    user,
+  });
+};
+
+exports.updatePassword = async (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).send({
+      status: "fail",
+      message: "Please fill all the fields",
     });
   }
+
+  // const hashpassod =  bcrypt.hash(password, 10);
+  // update the user if password is given or not
+
+  const hashpasword = await bcryptjs.hash(password, 12);
+
+  const user = await User.findByIdAndUpdate(req.user.id, {
+    password: hashpasword,
+  });
+  return res.status(200).send({
+    status: "success",
+    message: "Passwor updated successfully",
+    user,
+  });
 };

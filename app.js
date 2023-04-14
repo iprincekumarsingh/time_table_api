@@ -5,15 +5,10 @@ var morgan = require("morgan");
 var bodyParser = require('body-parser')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// parse application/x-www-form-urlencoded
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
-
-const whitelist = ["http://localhost:3000","http://127.0.0.1:3000","https://timetable-api-zeta.vercel.app/"]
+const whitelist = ["http://localhost:3000", "http://127.0.0.1:3000","https://timetable-api-zeta.vercel.app/"]
 const corsOptions = {
   origin: function (origin, callback) {
+
     if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {

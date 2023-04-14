@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const timetable = new mongoose.Schema({
   subject: {
     type: String,

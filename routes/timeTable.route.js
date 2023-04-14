@@ -7,6 +7,8 @@ const {
   seeTimeTable,
   findAllTeachers,
   viewparticularTimetable,
+  studentTimeTable,
+  studentCreateTimetable,
 } = require("../controllers/timeTableController");
 
 const auth = require("../middlewares/auth");
@@ -28,5 +30,9 @@ router.route("/timetable").get(auth, seeTimeTable);
 // fetching all teachers
 
 router.route("/teacher").get(auth, rolecheck, findAllTeachers);
+// public routes
+router.route("/class/:id/:sec").get(studentTimeTable);
+
+router.route("/student/create").post(auth, studentCreateTimetable);
 
 module.exports = router;

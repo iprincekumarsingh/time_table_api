@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema({
+const studentTimeTable = new mongoose.Schema({
   subject: {
     type: String,
     required: true,
@@ -33,3 +33,5 @@ const studentSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+module.exports = mongoose.model("studentTimeTable", studentTimeTable);
